@@ -1,2 +1,2 @@
-# Power Shell scripts
-My collection of Power Shell scripts
+# PowerShell scripts
+My collection of PowerShell scripts
