@@ -1,8 +1,10 @@
 ﻿[CmdletBinding()]
 Param(
+    # This parameter is mandatory
     [Parameter(Mandatory=$true)]
     [string]$abstractcommand,
-
+    
+    # This parameter is mandatory
     [Parameter(Mandatory=$true)]
     [string]$filePath,
 
@@ -12,5 +14,6 @@ Param(
 
 if (-not $noOutput)
 {
-    Write-Host $abstractcommand
+    Write-Host "abstractcommand = ", $abstractcommand
+    Write-Host "filePath = " $filePath
 }
