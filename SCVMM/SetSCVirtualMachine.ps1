@@ -1,0 +1,7 @@
+$VM = Get-SCVirtualMachine -VMMServer rnc-lab-scvmm01 -Name "RNCENG-VM-GVEHD" | Where-Object {$_.Cloud.Name -eq "RNC-LAB-ENG1"}
+$OperatingSystem = Get-SCOperatingSystem -VMMServer rnc-lab-scvmm01 -ID "00000000-0000-0000-0000-000000000000" | Where-Object {$_.Name -eq "Unknown"}
+$UserRole = Get-SCUserRole -VMMServer rnc-lab-scvmm01  -Name "ENG Users" -ID "cfb47d17-2725-4c97-a242-c086f4d7b6eb"
+$Cloud = Get-SCCloud
+$CPUType = Get-SCCPUType -VMMServer rnc-lab-scvmm01 | Where-Object {$_.Name -eq "3.60 GHz Xeon (2 MB L2 cache)"}
+
+Set-SCVirtualMachine -VM $VM -Name "RNCENG-VM-GVE" -Description "GVE Server to manage Extron" -OperatingSystem $OperatingSystem -Owner "EXTRON1\mtrang" -UserRole $UserRole -CPUCount 4 -MemoryMB 4096 -DynamicMemoryEnabled $false -MemoryWeight 5000 -VirtualVideoAdapterEnabled $false -CPUExpectedUtilizationPercent 20 -DiskIops 0 -CPUMaximumPercent 100 -CPUReserve 0 -NumaIsolationRequired $false -NetworkUtilizationMbps 0 -CPURelativeWeight 100 -HighlyAvailable $false -DRProtectionRequired $false -NumLock $false -BootOrder "CD", "IdeHardDrive", "PxeBoot", "Floppy" -CPULimitFunctionality $false -CPULimitForMigration $false -CPUType $CPUType -Tag "(none)" -QuotaPoint 1 -JobGroup 6e02560f-920c-4326-8658-4b8347482a6b -RunAsynchronously -StartAction AlwaysAutoTurnOnVM -StopAction SaveVM -DelayStartSeconds 0 -BlockDynamicOptimization $false -RunAsSystem -UseHardwareAssistedVirtualization $true -Cloud $Cloud
