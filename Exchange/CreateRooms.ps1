@@ -3,6 +3,13 @@ for ($i = 1; $i -le 100; $i++) {
     New-Mailbox -Name "ExchangeRoom$i" -DisplayName "Exchange Room $i" -Room
 }
 
+# Create a Distribution Group for rooms
+New-DistributionGroup -Name "Building 32 Conference Rooms" -OrganizationalUnit "contoso.com/rooms" -RoomList
+
+# Adding Rooms to a Distribution Group
+# Single room
+Add-DistributionGroupMember -Identity "Building 32 Conference Rooms" -Member confroom3223@contoso.com
+
 # Set Calendar-Processing for all rooms to auto accept if available and to not delete Subject, Organizer and Body
 Get-MailBox | Where-Object {$_.ResourceType -eq "Room"} | Set-CalendarProcessing -AutomateProcessing:AutoAccept -DeleteSubject $False -AddOrganizerToSubject $False -DeleteComment $False
 
