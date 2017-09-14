@@ -8,7 +8,8 @@ for ($i = 1; $i -le 100; $i++) {
 }
 
 # Create a Distribution Group for rooms
-New-DistributionGroup -Name "Building 32 Conference Rooms" -OrganizationalUnit "contoso.com/rooms" -RoomList
+# New-DistributionGroup -Name "Building 32 Conference Rooms" -OrganizationalUnit "contoso.com/rooms" -RoomList
+New-DistributionGroup -Name "Building 1 Conference Rooms" -RoomList
 
 # Adding Rooms to a Distribution Group
 # Single room
