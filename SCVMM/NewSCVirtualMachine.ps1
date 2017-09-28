@@ -15,10 +15,10 @@ New-SCVirtualDiskDrive -Bus 0 -Dynamic -FileName $NewVMName -LUN 0 -IDE -Virtual
 
 # Insert Windows Server 2016 DVD into DVD Drive
 $ISO = Get-SCISO -VMMServer rnc-lab-scvmm01.extron.com | Where-Object {$_.Name -eq "en_windows_server_2016_x64_dvd_9327751.iso"}
-$VirtualDVDDrive = Get-SCVirtualDVDDrive -VM $VM
+$VirtualDVDDrive = Get-SCVirtualDVDDrive -VM $NewVMName
 Remove-SCVirtualDVDDrive -VirtualDVDDrive $VirtualDVDDrive
-Set-SCVirtualDVDDrive -VirtualDVDDrive $VirtualDVDDrive -ISO $ISO -Bus 1 -LUN 0
+New-SCVirtualDVDDrive -VM $NewVMName -Bus 1 -LUN 0 -ISO $ISO
 
 # Connect Network Adapter to Open Net network
-$VirtualNetworkAdapter = Get-SCVirtualNetworkAdapter -VM $VM
+$VirtualNetworkAdapter = Get-SCVirtualNetworkAdapter -VM $NewVMName
 Set-SCVirtualNetworkAdapter -VirtualNetworkAdapter $VirtualNetworkAdapter -VMNetwork $VMNetwork
