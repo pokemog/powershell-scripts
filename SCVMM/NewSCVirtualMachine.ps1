@@ -3,17 +3,22 @@ $UserRole = Get-SCUserRole -VMMServer rnc-lab-scvmm01  -Name "ENG Users" -ID "cf
 $Cloud = Get-SCCloud
 $CPUType = Get-SCCPUType -VMMServer rnc-lab-scvmm01 | Where-Object {$_.Name -eq "3.60 GHz Xeon (2 MB L2 cache)"}
 $VMNetwork = Get-SCVMNetwork | Where-Object {$_.Name -eq "ENG - Open Net"}
+$NewVMName = "RNCENG-VM-GVE27"
 
-New-SCVirtualMachine  -Cloud $Cloud -VM $VM -Name "RNCENG-VM-TEST" -Description "New Virtual Machine cloned from RNCENG-VM-GVE" -UserRole $UserRole -CPUCount 2 -MemoryMB 2048 -CPURelativeWeight 100 -CPULimitForMigration $false -CPUType $CPUType -StartAction AlwaysAutoTurnOnVM -StopAction SaveVM
+New-SCVirtualMachine  -Cloud $Cloud -VM $VM -Name $NewVMName -Description "New Virtual Machine cloned from RNCENG-VM-GVE" -UserRole $UserRole -CPUCount 2 -MemoryMB 2048 -CPURelativeWeight 100 -CPULimitForMigration $false -CPUType $CPUType -StartAction AlwaysAutoTurnOnVM -StopAction SaveVM
 
-$VM = Get-SCVirtualMachine | Where-Object {$_.Name -eq "RNCENG-VM-TEST"}
+# Replace Disk Drive with new blank Disk Drive named after VM Name
+$VM = Get-SCVirtualMachine | Where-Object {$_.Name -eq $NewVMName}
 $VirtualDiskDrive = Get-SCVirtualDiskDrive -VM $VM
 Remove-SCVirtualDiskDrive -VirtualDiskDrive $VirtualDiskDrive
-New-SCVirtualDiskDrive -Bus 0 -Dynamic -FileName RNCENG-VM-NEW -LUN 0 -IDE -VirtualHardDiskSizeMB 40000 -VM $VM
+New-SCVirtualDiskDrive -Bus 0 -Dynamic -FileName $NewVMName -LUN 0 -IDE -VirtualHardDiskSizeMB 40000 -VM $VM
 
+# Insert Windows Server 2016 DVD into DVD Drive
 $ISO = Get-SCISO -VMMServer rnc-lab-scvmm01.extron.com | Where-Object {$_.Name -eq "en_windows_server_2016_x64_dvd_9327751.iso"}
 $VirtualDVDDrive = Get-SCVirtualDVDDrive -VM $VM
+Remove-SCVirtualDVDDrive -VirtualDVDDrive $VirtualDVDDrive
 Set-SCVirtualDVDDrive -VirtualDVDDrive $VirtualDVDDrive -ISO $ISO -Bus 1 -LUN 0
 
+# Connect Network Adapter to Open Net network
 $VirtualNetworkAdapter = Get-SCVirtualNetworkAdapter -VM $VM
 Set-SCVirtualNetworkAdapter -VirtualNetworkAdapter $VirtualNetworkAdapter -VMNetwork $VMNetwork
