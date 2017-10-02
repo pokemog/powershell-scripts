@@ -44,9 +44,9 @@ WCF-TCP-PortSharing45
 Windows-Identity-Foundation
 
 # Windows Process Activation Service
+WAS-WindowsActivationService
 WAS-ProcessModel
 WAS-ConfigurationAPI
-WAS-WindowsActivationService
 
 # WOW64 support
 ServerCore-WOW64
