@@ -1,0 +1,1 @@
+New-SmbShare –Name ShareName –Path C:\LocalFolder –FullAccess Username
