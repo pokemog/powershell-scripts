@@ -59,11 +59,49 @@
 ## WOW64 support
 #ServerCore-WOW64
 
+$features = @(
+    'IIS-WebServerRole'
+    'IIS-WebServer'
+    'IIS-CommonHttpFeatures'
+    'IIS-DefaultDocument'
+    'IIS-DirectoryBrowsing'
+    'IIS-HttpErrors'
+    'IIS-StaticContent'
+    'IIS-HealthAndDiagnostics'
+    'IIS-HttpLogging'
+    'IIS-Performance'
+    'IIS-HttpCompressionStatic'
+    'IIS-Security'
+    'IIS-RequestFiltering'
+    'IIS-WindowsAuthentication'
+    'WAS-WindowsActivationService'
+    'WAS-ProcessModel'
+    'WAS-ConfigurationAPI'
+    'NetFx4'
+    'NetFx4Extended-ASPNET45'
+    'WCF-Services45'
+    'WCF-HTTP-Activation45 '
+    'WCF-TCP-PortSharing45'
+    'IIS-ApplicationDevelopment'
+    'IIS-NetFxExtensibility45'
+    'IIS-ISAPIExtensions'
+    'IIS-ISAPIFilter'
+    'IIS-ASP'
+    'IIS-ASPNET45'
+    'IIS-WebServerManagementTools'
+    'IIS-ManagementConsole'
+    'IIS-ManagementScriptingTools'
+    'IIS-ManagementService'
+    'Windows-Identity-Foundation'
+    'ServerCore-WOW64'
+)
+
 # Retrieve lists of Windows Features to enable
-$features = Get-Content features.txt
-# Enabling the Features
+#$features = Get-Content features.txt
+
+# Enable the Features
 foreach ($feature in $Features) {
-    Enable-WindowsOptionalFeature -Online -FeatureName $feature
+    Enable-WindowsOptionalFeature -Online -FeatureName $feature -All
 }
 
 # Adding Firewall Rule for inbound port 5555
