@@ -1,0 +1,5 @@
+$url = "https://erai-raws.info/releases/?dir=One%20Piece/501-600/%5BErai-raws%5D%20One%20Piece%20-%20501~600%20%5B1080p%5D%5BMultiple%20Subtitle%5D"
+$r = Invoke-WebRequest $url
+$l = $r.Links
+($l | where {$_.href -match 'One%20Piece'}).href > 501-600.txt
+wget --input-file=501-600.txt --continue
