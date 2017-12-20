@@ -116,9 +116,11 @@ Rename-Computer -NewName "RNCENG-VM-GVESM"
 # Create shares to deploy to GVE and temp shared folders
 # https://community.spiceworks.com/topic/1068305-powrshell-to-add-multiple-security-groups-to-shares
 New-Item -Path "C:\shared" -ItemType Directory
+New-Item -Path "C:\inetpub\wwwroot\GVE"
 
 Set-Location "C:\inetpub\wwwroot\GVE"
 $Folders = "C:\inetpub\wwwroot\GVE", "C:\shared"
+
 foreach ($Folder in $Folders) {
     ## Kill all inherited permissions
     $acl = Get-Acl $Folder
@@ -136,3 +138,6 @@ foreach ($Folder in $Folders) {
 
 New-SmbShare -Name "GVE" -Path "C:\inetpub\wwwroot\GVE" -Description "GVE share for deployment" -FullAccess "Everyone"
 New-SmbShare -Name "shared" -Path "C:\shared" -Description "GVE share for temp files" -FullAccess "Everyone"
+
+# Enable WinRM for remote access
+winrm quickconfig
