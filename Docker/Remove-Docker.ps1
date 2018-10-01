@@ -1,5 +1,5 @@
 $ErrorActionPreference = “SilentlyContinue”
-kill -force -processname ‘Docker for Windows’, com.docker.db, vpnkit, com.docker.proxy, com.docker.9pdb, moby-diag-dl, dockerd
+Stop-Process -force -processname ‘Docker for Windows’, com.docker.db, vpnkit, com.docker.proxy, com.docker.9pdb, moby-diag-dl, dockerd
 try {
 ./MobyLinux.ps1 -Destroy
 } Catch {}
