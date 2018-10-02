@@ -6,6 +6,9 @@ Param (
     # Deploy Server Name
     [Parameter(Mandatory = $true)]
     [string] $ComputerName,
+    # Path to Modular folder
+    [Parameter(Mandatory = $false)]
+    [string] $FolderPath = 'C:\inetpub\wwwroot\GVE\Modulars\Device',
     # SQL Server Host
     [Parameter(Mandatory = $true)]
     [string] $DbServerName,
@@ -24,7 +27,7 @@ $BeaconClientIpAddress = $ComputerName
 $GveServerHostIp = 'http://' + $ComputerName + '/GVE'
 
 $SettingsFile = 'appsettings.json'
-$SettingsPath = '.\configuration'
+$SettingsPath = $FolderPath
 $SettingsFilePath = Join-Path $SettingsPath $SettingsFile
 $SettingsOutputPath = '.\output_files\release'
 $SettingsOutputFilePath = Join-Path $SettingsOutputPath $SettingsFile
@@ -40,4 +43,4 @@ $SqlBuilder["User ID"] = $DbUsername
 $SqlBuilder["Password"] = $DbPassword
 
 $Settings.ConnectionStrings.DefaultConnection = $SqlBuilder.ToString()
-$Settings | ConvertTo-Json -Depth 10 | Out-File -FilePath $SettingsOutputFilePath
+$Settings | ConvertTo-Json -Depth 10 | Out-File -FilePath $SettingsFilePath
