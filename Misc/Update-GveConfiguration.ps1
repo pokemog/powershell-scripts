@@ -38,7 +38,7 @@ function UpdateSettings {
 
     $Settings = @{
         'ServerIPAddress'         = $ServerIp;
-        'DatabaseServerIP'        = $DbServerIp;
+        'DBServerHostname'        = $DbServerIp;
         'DatabaseName'            = $DbName;
         'DatabaseLoginName'       = $DbUsername;
         'DatabasePassword'        = $DbPassword;
