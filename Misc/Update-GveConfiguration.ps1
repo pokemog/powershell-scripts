@@ -38,7 +38,7 @@ function UpdateSettings {
 
     $Settings = @{
         'ServerIPAddress'         = $ServerIp;
-        'DatabaseServerIP'        = $DbServerIp;
+        'DBServerHostname'        = $DbServerIp;
         'DatabaseName'            = $DbName;
         'DatabaseLoginName'       = $DbUsername;
         'DatabasePassword'        = $DbPassword;
@@ -60,7 +60,7 @@ function UpdateSettings {
         $Xml.appSettings.ReplaceChild($NewChild, $OldChild)
     }
 
-    #$Xml.Save($PathToSettingsFile)
+    $Xml.Save($PathToSettingsFile)
 }
 
 function UpdateConnectionStrings {
@@ -80,15 +80,19 @@ function UpdateConnectionStrings {
         $OldChild = $Xml.connectionStrings.add | Where-Object {$_.name -eq $DbContext}
         $NewChild = $OldChild.Clone()
         if ($DbContext -eq 'GveModel') {
-            $SqlBuilder = New-Object System.Data.EntityClient.EntityConnectionStringBuilder -ArgumentList $OldChild.connectionString
-            $SqlBuilder["metadata"] = "res://*/EF.GveModel.csdl|res://*/EF.GveModel.ssdl|res://*/EF.GveModel.msl"
-            $SqlBuilder["provider"] = 'System.Data.SqlClient'
+            $SqlBuilder = New-Object System.Data.SqlClient.SqlConnectionStringBuilder
             $SqlBuilder["Data Source"] = $DbServerIp
             $SqlBuilder["Initial Catalog"] = $DbName
             $SqlBuilder["User ID"] = $DbUsername
             $SqlBuilder["Password"] = $DbPassword
+            $SqlBuilder["MultipleActiveResultSets"] = $true
 
-            $NewChild.connectionString = $SqlBuilder.ToString()
+            $EntityBuilder = New-Object System.Data.EntityClient.EntityConnectionStringBuilder -ArgumentList $OldChild.connectionString
+            $EntityBuilder["metadata"] = "res://*/EF.GveModel.csdl|res://*/EF.GveModel.ssdl|res://*/EF.GveModel.msl"
+            $EntityBuilder["provider connection string"] = $SqlBuilder.ToString()
+            $EntityBuilder["provider"] = 'System.Data.SqlClient'
+
+            $NewChild.connectionString = $EntityBuilder.ToString()
             $Xml.connectionStrings.ReplaceChild($NewChild, $OldChild)
         }
         else {
@@ -102,6 +106,8 @@ function UpdateConnectionStrings {
             $Xml.connectionStrings.ReplaceChild($NewChild, $OldChild)
         }
     }
+
+    $Xml.Save($PathToSettingsFile)
 }
 function UpdateLicense {
     param (
@@ -113,10 +119,11 @@ function UpdateLicense {
     [Xml] $Xml = Get-Content $PathToSettingsFile
     $Xml.RegistrationInfo.ExistingRegistrationKey = $RegistrationKey
     $Xml.RegistrationInfo.IPAddress = $ServerIp
-    #$Xml.Save($PathToSettingsFile)
+    $Xml.Save($PathToSettingsFile)
 }
 
 $SettingsFiles = 'Settings.config', 'GVE.license.config', 'connectionStrings.config'
+[System.Reflection.Assembly]::LoadWithPartialName('System.Data.Entity')
 
 foreach ($SettingsFile in $SettingsFiles) {
     switch ($SettingsFile) {
@@ -136,5 +143,5 @@ foreach ($SettingsFile in $SettingsFiles) {
             break
         }
         Default {}
-    }    
+    }
 }
