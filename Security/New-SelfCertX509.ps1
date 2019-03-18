@@ -1,13 +1,13 @@
 # setup certificate properties including the commonName (DNSName) property for Chrome 58+
 $certificate = New-SelfSignedCertificate `
-    -Subject gve22ldap2 `
-    -DnsName gve22ldap2 `
+    -Subject localhost `
+    -DnsName localhost `
     -KeyAlgorithm RSA `
     -KeyLength 2048 `
     -NotBefore (Get-Date) `
-    -NotAfter (Get-Date).AddYears(5) `
+    -NotAfter (Get-Date).AddYears(50) `
     -CertStoreLocation "cert:CurrentUser\My" `
-    -FriendlyName "gve22ldap2" `
+    -FriendlyName "localhost" `
     -HashAlgorithm SHA256 `
     -KeyUsage DigitalSignature, KeyEncipherment, DataEncipherment `
     -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.1") 
@@ -22,8 +22,8 @@ New-Item -ItemType Directory -Force -Path $tmpPath
 
 # set certificate password here
 $pfxPassword = ConvertTo-SecureString -String "notasecret" -Force -AsPlainText
-$pfxFilePath = "c:\tmp\gve22ldap2.pfx"
-$cerFilePath = "c:\tmp\gve22ldap2.cer"
+$pfxFilePath = "c:\tmp\localhost.pfx"
+$cerFilePath = "c:\tmp\localhost.cer"
 
 # create pfx certificate
 Export-PfxCertificate -Cert $certificatePath -FilePath $pfxFilePath -Password $pfxPassword
