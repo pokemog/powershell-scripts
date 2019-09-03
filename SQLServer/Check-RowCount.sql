@@ -8,3 +8,20 @@ IF ((SELECT COUNT(FirstName) as FirstNameCnt
     END
 
 PRINT 'SHOULD NOT SEE THIS'
+
+SELECT(
+    SELECT COUNT(*)
+        FROM [dbo].[es_InputHoursLog]
+) AS InputHoursLog,
+(SELECT COUNT(*)
+    FROM [dbo].[es_ControllerActivityLog]
+    ) AS ControllerActivityLog,
+(SELECT COUNT(*)
+    FROM [dbo].[es_DeviceActivityLog]
+    ) AS DeviceActivityLog,
+(SELECT COUNT(*)
+    FROM es_MonitorHistoryLog
+    ) AS MonitorHistoryLog,
+(SELECT COUNT(*)
+    FROM [dbo].[es_ControllerConnectionLog]
+    ) AS ControllerConnectionLog

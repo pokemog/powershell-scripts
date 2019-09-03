@@ -1,13 +1,13 @@
 # setup certificate properties including the commonName (DNSName) property for Chrome 58+
 $certificate = New-SelfSignedCertificate `
-    -Subject localhost `
-    -DnsName localhost `
+    -Subject exch1 `
+    -DnsName "exch1", "exch1.vmm-qa1.com" `
     -KeyAlgorithm RSA `
     -KeyLength 2048 `
     -NotBefore (Get-Date) `
     -NotAfter (Get-Date).AddYears(50) `
     -CertStoreLocation "cert:CurrentUser\My" `
-    -FriendlyName "localhost" `
+    -FriendlyName "exch1.vmm-qa1.com" `
     -HashAlgorithm SHA256 `
     -KeyUsage DigitalSignature, KeyEncipherment, DataEncipherment `
     -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.1") 
@@ -22,8 +22,8 @@ New-Item -ItemType Directory -Force -Path $tmpPath
 
 # set certificate password here
 $pfxPassword = ConvertTo-SecureString -String "notasecret" -Force -AsPlainText
-$pfxFilePath = "c:\tmp\localhost.pfx"
-$cerFilePath = "c:\tmp\localhost.cer"
+$pfxFilePath = "c:\tmp\exch1.vmm-qa1.com.pfx"
+$cerFilePath = "c:\tmp\exch1.vmm-qa1.com.cer"
 
 # create pfx certificate
 Export-PfxCertificate -Cert $certificatePath -FilePath $pfxFilePath -Password $pfxPassword
